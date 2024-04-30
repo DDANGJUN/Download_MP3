@@ -17,20 +17,25 @@ options.add_experimental_option("excludeSwitches", ["enable-automation"])  # 자
 options.add_experimental_option("useAutomationExtension", False)  # 자동화 확장기능 비활성화
 options.add_argument('--disable-blink-features=AutomationControlled')  # 자동화 탐지 회피
 service = Service()
+options.add_argument("headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 #===========================================================================================
 
 def download_video(video_url):
-    yt = YouTube(video_url)
-    downloadDir = 'D:\Vscode\DownloadMp3Bot\music'
-    yt.streams.filter(only_audio=True).first().download()
-
+    try:
+        yt = YouTube(video_url)
+        downloadDir = 'D:\Vscode\DownloadMp3Bot\music'
+        yt.streams.filter(only_audio=True).first().download()
+        print('Downloaded! {}'.format(cnt))
+    except:
+        print('Error! {}'.format(cnt))
+        pass
+        
+print('Start!')
 files = open('MusicList.txt', 'r', encoding='utf-8')
-# musicList = files.readlines()
-# musicList = numpy.array(musicList)
 
-cnt = 0
+cnt = 1
 
 for i in files:
     driver.get("https://www.youtube.com/")
@@ -51,3 +56,4 @@ for i in files:
 
 files.close()
 print('Done!')
+driver.quit()
